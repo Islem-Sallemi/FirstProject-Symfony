@@ -1,0 +1,296 @@
+{% extends 'sneat_base.html.twig' %}
+
+{% block title %}Dashboard - Pharmax Admin{% endblock %}
+
+{% block content %}
+<div class="container-xxl">
+  <div class="row">
+    <div class="col-12 mb-4">
+      <h4 class="mb-1">Bienvenue au Backoffice Pharmax</h4>
+      <p class="text-muted">Voici un aperçu de votre inventaire</p>
+    </div>
+  </div>
+
+  <!-- Statistics Row -->
+  <div class="row">
+    <!-- Total Products Card -->
+    <div class="col-md-6 col-lg-3 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6 class="text-muted fw-normal mb-3">Total Produits</h6>
+              <h3 class="mb-2">{{ total_produits }}</h3>
+              <small class="text-success"><i class="bx bx-up-arrow-alt"></i> Produits en stock</small>
+            </div>
+            <div class="avatar">
+              <div class="avatar-initial bg-label-primary rounded" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                <i class="bx bx-package" style="font-size: 1.5rem;"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Total Categories Card -->
+    <div class="col-md-6 col-lg-3 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6 class="text-muted fw-normal mb-3">Total Catégories</h6>
+              <h3 class="mb-2">{{ total_categories }}</h3>
+              <small class="text-info"><i class="bx bx-folder"></i> Catégories actives</small>
+            </div>
+            <div class="avatar">
+              <div class="avatar-initial bg-label-info rounded" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                <i class="bx bx-folder" style="font-size: 1.5rem;"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expired Products Card -->
+    <div class="col-md-6 col-lg-3 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h6 class="text-muted fw-normal mb-3">Produits Expirés</h6>
+              <h3 class="mb-2">{{ produits_expires }}</h3>
+              <small class="text-warning"><i class="bx bx-time"></i> À retirer du stock</small>
+            </div>
+            <div class="avatar">
+              <div class="avatar-initial bg-label-warning rounded" style="width: 45px; height: 45px; display: flex; align-items: center; justify-content: center;">
+                <i class="bx bx-time-five" style="font-size: 1.5rem;"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pie Chart Row -->
+  <div class="row mt-4">
+    <div class="col-lg-6 mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title mb-0">Produits Valables vs Hors Stock par Mois</h5>
+        </div>
+        <div class="card-body">
+          <div style="position: relative; height: 300px;">
+            <canvas id="statusChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bar Charts Row -->
+    <div class="row mt-4">
+      <!-- Most Expensive Products Chart -->
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">5 Produits les Plus Chers</h5>
+          </div>
+          <div class="card-body">
+            <div style="position: relative; height: 300px;">
+              <canvas id="mostExpensiveChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Least Expensive Products Chart -->
+      <div class="col-lg-6 mb-4">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">5 Produits les Moins Chers</h5>
+          </div>
+          <div class="card-body">
+            <div style="position: relative; height: 300px;">
+              <canvas id="leastExpensiveChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Links -->
+    <div class="row mt-4">
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-body text-center">
+            <i class="bx bx-package" style="font-size: 3rem; color: #7367f0;"></i>
+            <h5 class="card-title mt-3">Gérer les Produits</h5>
+            <p class="card-text text-muted">Ajouter, modifier ou supprimer des produits</p>
+            <a href="{{ path('app_produit_index') }}" class="btn btn-primary">
+              Accéder <i class="bx bx-chevron-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-body text-center">
+          <i class="bx bx-folder" style="font-size: 3rem; color: #28c76f;"></i>
+          <h5 class="card-title mt-3">Gérer les Catégories</h5>
+          <p class="card-text text-muted">Ajouter ou modifier les catégories</p>
+          <a href="{{ path('app_categorie_index') }}" class="btn btn-success">
+            Accéder <i class="bx bx-chevron-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ parent() }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Pie Chart - Produits Valables vs Hors Stock
+  const statusByMonth = {{ status_by_month|json_encode|raw }};
+  
+  if (statusByMonth.length > 0) {
+    const months = statusByMonth.map(d => d.month);
+    const valableData = statusByMonth.map(d => d.valable);
+    const horsStockData = statusByMonth.map(d => d.hors_stock);
+    
+    const ctx = document.getElementById('statusChart');
+    if (ctx) {
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['Produits Valables', 'Produits Hors Stock'],
+          datasets: [
+            {
+              label: 'Nombre de Produits',
+              data: [
+                valableData.reduce((a, b) => a + b, 0),
+                horsStockData.reduce((a, b) => a + b, 0)
+              ],
+              backgroundColor: [
+                '#28c76f',
+                '#ea5455'
+              ],
+              borderColor: [
+                '#28c76f',
+                '#ea5455'
+              ],
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                padding: 20,
+                font: {
+                  size: 13
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+  }
+
+  // Bar Chart - Most Expensive Products (vertical)
+  const mostExpensive = {{ most_expensive|json_encode|raw }};
+  if (mostExpensive && mostExpensive.length > 0) {
+    const mostExpensiveNames = mostExpensive.map(p => p.nom);
+    const mostExpensivePrices = mostExpensive.map(p => parseFloat(p.prix));
+
+    const ctxMost = document.getElementById('mostExpensiveChart');
+    if (ctxMost) {
+      new Chart(ctxMost, {
+        type: 'bar',
+        data: {
+          labels: mostExpensiveNames,
+          datasets: [{
+            label: 'Prix (DTN)',
+            data: mostExpensivePrices,
+            backgroundColor: '#7367f0',
+            borderColor: '#5f3bd8',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true, position: 'top' }
+          },
+          scales: {
+            x: {
+              ticks: { font: { size: 12 } },
+              title: { display: true, text: 'Produits' }
+            },
+            y: {
+              beginAtZero: true,
+              ticks: { font: { size: 12 } },
+              title: { display: true, text: 'Prix (DTN)' }
+            }
+          }
+        }
+      });
+    }
+  }
+
+  // Bar Chart - Least Expensive Products (vertical)
+  const leastExpensive = {{ least_expensive|json_encode|raw }};
+  if (leastExpensive && leastExpensive.length > 0) {
+    const leastExpensiveNames = leastExpensive.map(p => p.nom);
+    const leastExpensivePrices = leastExpensive.map(p => parseFloat(p.prix));
+
+    const ctxLeast = document.getElementById('leastExpensiveChart');
+    if (ctxLeast) {
+      new Chart(ctxLeast, {
+        type: 'bar',
+        data: {
+          labels: leastExpensiveNames,
+          datasets: [{
+            label: 'Prix (DTN)',
+            data: leastExpensivePrices,
+            backgroundColor: '#28c76f',
+            borderColor: '#20a64a',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: true, position: 'top' }
+          },
+          scales: {
+            x: {
+              ticks: { font: { size: 12 } },
+              title: { display: true, text: 'Produits' }
+            },
+            y: {
+              beginAtZero: true,
+              ticks: { font: { size: 12 } },
+              title: { display: true, text: 'Prix (DTN)' }
+            }
+          }
+        }
+      });
+    }
+  }
+});
+</script>
+{% endblock %}

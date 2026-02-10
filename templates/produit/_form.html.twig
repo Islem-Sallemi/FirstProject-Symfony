@@ -1,0 +1,31 @@
+{{ form_start(form) }}
+    {% if form.image is defined %}
+        <div class="form-group mb-3">
+            {{ form_label(form.image) }}
+            {{ form_widget(form.image, {
+                'attr': {
+                    'class': 'form-control',
+                    'accept': 'image/*'
+                }
+            }) }}
+            {{ form_errors(form.image) }}
+            <small class="form-text text-muted d-block mt-2">
+                Formats acceptés: JPEG, PNG, GIF, WebP (Max: 5MB)
+            </small>
+        </div>
+
+        {% if form.vars.data.image %}
+            <div class="mb-3">
+                <label>Image actuelle:</label>
+                <div>
+                    <img src="{{ asset('uploads/' ~ form.vars.data.image) }}" alt="Product image" style="max-width: 200px; max-height: 200px;">
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+
+    {{ form_rest(form) }}
+
+    <button class="btn btn-primary mt-3">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
+

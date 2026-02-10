@@ -1,0 +1,158 @@
+<!doctype html>
+
+<html
+  lang="fr"
+  class="layout-menu-fixed layout-compact"
+  data-template="vertical-menu-template-free">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>{% block title %}Pharmax - Admin Dashboard{% endblock %}</title>
+
+    <meta name="description" content="" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('sneat/assets/img/favicon/favicon.ico') }}" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet" />
+
+    <link rel="stylesheet" href="{{ asset('sneat/assets/vendor/fonts/iconify-icons.css') }}" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{{ asset('sneat/assets/vendor/css/core.css') }}" />
+    <link rel="stylesheet" href="{{ asset('sneat/assets/css/demo.css') }}" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{{ asset('sneat/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
+
+    <!-- Page CSS -->
+    {% block extra_css %}{% endblock %}
+
+    <!-- Helpers -->
+    <script src="{{ asset('sneat/assets/vendor/js/helpers.js') }}"></script>
+
+    <script src="{{ asset('sneat/assets/js/config.js') }}"></script>
+  </head>
+
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+      <div class="layout-container">
+        <!-- Menu -->
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+          <div class="app-brand demo">
+            <a href="{{ path('app_produit_index') }}" class="app-brand-link d-flex align-items-center">
+              <img src="{{ asset('uploads/logo.jpg') }}" alt="Pharmax" style="height:36px; object-fit:contain;" />
+              <span class="visually-hidden">Pharmax</span>
+            </a>
+
+            <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+              <i class="bx bx-chevron-left d-block d-xl-none align-middle"></i>
+            </a>
+          </div>
+
+          <div class="menu-divider mt-0"></div>
+          <div class="menu-inner-shadow"></div>
+
+          <ul class="menu-inner py-1">
+            <!-- Dashboard -->
+            <li class="menu-item">
+              <a href="{{ path('admin_dashboard') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <div class="text-truncate">Dashboard</div>
+              </a>
+            </li>
+
+            <!-- Produits -->
+            <li class="menu-item">
+              <a href="{{ path('app_produit_index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-package"></i>
+                <div class="text-truncate">Produits</div>
+              </a>
+            </li>
+
+            <!-- Categories -->
+            <li class="menu-item">
+              <a href="{{ path('app_categorie_index') }}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-folder"></i>
+                <div class="text-truncate">Catégories</div>
+              </a>
+            </li>
+
+            <!-- Menu Divider -->
+            <li class="menu-divider my-2"></li>
+
+            <!-- Front Office Section -->
+            <li class="menu-header small text-uppercase">
+              <span class="menu-header-text">Front Office</span>
+            </li>
+
+            <!-- Produits Front -->
+            <li class="menu-item">
+              <a href="{{ path('front_produits') }}" target="_blank" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-chevron-right"></i>
+                <div class="text-truncate">Voir Produits</div>
+              </a>
+            </li>
+          </ul>
+        </aside>
+        <!-- / Menu -->
+
+        <!-- Layout page -->
+        <div class="layout-page">
+          <!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+            <div class="container-xxl flex-grow-1 container-p-y">
+              {% block content %}{% endblock %}
+            </div>
+            <!-- / Content -->
+
+            <!-- Footer -->
+            <footer class="content-footer footer bg-footer-theme">
+              <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                <div class="mb-2 mb-md-0">
+                  <span class="text-muted">© <script>
+                    document.write(new Date().getFullYear());
+                  </script>, made with <i class="tf-icons bx bxs-heart text-danger"></i> by Pharmax
+                  </span>
+                </div>
+              </div>
+            </footer>
+            <!-- / Footer -->
+
+            <div class="content-backdrop fade"></div>
+          </div>
+          <!-- / Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+      </div>
+
+      <!-- Overlay -->
+      <div class="layout-overlay layout-menu-toggle"></div>
+    </div>
+    <!-- / Layout wrapper -->
+
+    <!-- Core JS -->
+    <script src="{{ asset('sneat/assets/vendor/libs/jquery/jquery.js') }}"></script>
+    <script src="{{ asset('sneat/assets/vendor/libs/popper/popper.js') }}"></script>
+    <script src="{{ asset('sneat/assets/vendor/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('sneat/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+
+    <script src="{{ asset('sneat/assets/vendor/js/menu.js') }}"></script>
+
+    <!-- Main JS -->
+    <script src="{{ asset('sneat/assets/js/main.js') }}"></script>
+
+    <!-- Page JS -->
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

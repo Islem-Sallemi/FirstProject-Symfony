@@ -1,0 +1,190 @@
+{% extends 'front_base.html.twig' %}
+
+{% block title %}Accueil - Pharmax{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 80px 0;">
+    <div class="container-xxl">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Votre Pharmacie en Ligne</h1>
+                <p class="fs-5 mb-4">Découvrez notre large gamme de produits de santé et bien-être. Livraison rapide et sécurisée.</p>
+                <a href="{{ path('front_produits') }}" class="btn btn-light btn-lg">
+                    <i class="bx bx-package"></i> Voir nos Produits
+                </a>
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="bx bx-health" style="font-size: 150px; opacity: 0.1;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section style="padding: 60px 0; background: white;">
+    <div class="container-xxl">
+        <div class="row text-center">
+            <div class="col-md-3 mb-4">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <h2 class="fw-bold text-primary">{{ total_produits }}</h2>
+                        <p class="text-muted">Produits Disponibles</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <h2 class="fw-bold text-success">{{ total_categories }}</h2>
+                        <p class="text-muted">Catégories</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <h2 class="fw-bold text-info">{{ produits_valables }}</h2>
+                        <p class="text-muted">Produits en Stock</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card border-0">
+                    <div class="card-body">
+                        <h2 class="fw-bold text-warning">100%</h2>
+                        <p class="text-muted">Satisfaction Client</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Products Section -->
+<section style="padding: 60px 0;">
+    <div class="container-xxl">
+        <h2 class="text-center fw-bold mb-5">Produits Populaires</h2>
+        <div class="row g-4">
+            {% for produit in featured_products|slice(0, 6) %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card product-card h-100">
+                    {% if produit.image %}
+                        <img src="{{ asset('uploads/' ~ produit.image) }}" class="card-img-top product-image" alt="{{ produit.nom }}">
+                    {% else %}
+                        <div class="product-image d-flex align-items-center justify-content-center">
+                            <i class="bx bx-image" style="font-size: 50px; color: #ccc;"></i>
+                        </div>
+                    {% endif %}
+                    
+                    {% if produit.statut %}
+                        <span class="badge bg-success badge">En Stock</span>
+                    {% else %}
+                        <span class="badge bg-danger badge">Hors Stock</span>
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">{{ produit.nom }}</h5>
+                        <p class="card-text text-muted" style="height: 50px; overflow: hidden;">{{ produit.description|slice(0, 80) }}...</p>
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="text-primary fw-bold mb-0">{{ produit.prix }} DTN</h4>
+                            {% if produit.categorie %}
+                                <small class="badge bg-light text-dark">{{ produit.categorie.nom }}</small>
+                            {% endif %}
+                        </div>
+
+                        <a href="{{ path('front_detail', {'id': produit.id}) }}" class="btn btn-primary btn-sm w-100">
+                            <i class="bx bx-detail"></i> Voir Détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="{{ path('front_produits') }}" class="btn btn-outline-primary btn-lg">
+                <i class="bx bx-chevron-right"></i> Voir tous les produits
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us Section -->
+<section style="padding: 60px 0; background: #f7f7f7;">
+    <div class="container-xxl">
+        <h2 class="text-center fw-bold mb-5">Pourquoi nous choisir?</h2>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="bx bx-certified" style="font-size: 50px; color: #667eea;"></i>
+                    </div>
+                    <h5 class="fw-bold">Produits Certifiés</h5>
+                    <p class="text-muted">Tous nos produits sont certifiés et contrôlés qualité</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="bx bx-fast-forward" style="font-size: 50px; color: #667eea;"></i>
+                    </div>
+                    <h5 class="fw-bold">Livraison Rapide</h5>
+                    <p class="text-muted">Livraison en 24-48h partout en Tunisie</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="bx bx-shield-plus" style="font-size: 50px; color: #667eea;"></i>
+                    </div>
+                    <h5 class="fw-bold">Sécurisé</h5>
+                    <p class="text-muted">Paiement et données personnelles sécurisés</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="text-center">
+                    <div class="mb-3">
+                        <i class="bx bx-support" style="font-size: 50px; color: #667eea;"></i>
+                    </div>
+                    <h5 class="fw-bold">Support 24/7</h5>
+                    <p class="text-muted">Équipe clientèle disponible à votre service</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" style="padding: 60px 0;">
+    <div class="container-xxl">
+        <h2 class="text-center fw-bold mb-5">Nous Contacter</h2>
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card">
+                    <div class="card-body p-5">
+                        <form>
+                            <div class="mb-3">
+                                <label class="form-label">Nom</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Message</label>
+                                <textarea class="form-control" rows="5"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bx bx-send"></i> Envoyer
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

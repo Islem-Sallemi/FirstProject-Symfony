@@ -1,0 +1,133 @@
+{% extends 'sneat_base.html.twig' %}
+
+{% block title %}Catégories - Pharmax Admin{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title mb-3">Filtres et Recherche</h5>
+        
+        <form method="GET" action="{{ path('app_categorie_index') }}" class="row g-3">
+          <!-- Recherche -->
+          <div class="col-md-6">
+            <label class="form-label">Rechercher</label>
+            <input type="text" name="search" class="form-control" placeholder="Nom ou description..." value="{{ search }}">
+          </div>
+
+          <!-- Tri -->
+          <div class="col-md-3">
+            <label class="form-label">Trier par</label>
+            <select name="sortBy" class="form-select">
+              <option value="createdAt" {% if sortBy == 'createdAt' %}selected{% endif %}>Date d'ajout</option>
+              <option value="nom" {% if sortBy == 'nom' %}selected{% endif %}>Nom</option>
+            </select>
+          </div>
+
+          <!-- Ordre de tri -->
+          <div class="col-md-3">
+            <label class="form-label">Ordre</label>
+            <select name="sortOrder" class="form-select">
+              <option value="DESC" {% if sortOrder == 'DESC' %}selected{% endif %}>↓ Décroissant</option>
+              <option value="ASC" {% if sortOrder == 'ASC' %}selected{% endif %}>↑ Croissant</option>
+            </select>
+          </div>
+
+          <!-- Boutons -->
+          <div class="col-12 d-flex align-items-end gap-2">
+            <button type="submit" class="btn btn-primary">
+              <i class="bx bx-search"></i> Rechercher
+            </button>
+            <a href="{{ path('app_categorie_index') }}" class="btn btn-secondary">
+              <i class="bx bx-reset"></i> Réinitialiser
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Liste des Catégories ({{ categories|length }})</h5>
+        <a href="{{ path('app_categorie_new') }}" class="btn btn-primary btn-sm">
+          <i class="bx bx-plus"></i> Ajouter une catégorie
+        </a>
+      </div>
+      <div class="table-responsive text-nowrap">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nom</th>
+              <th>Description</th>
+              <th>Produits</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for categorie in categories %}
+            <tr>
+              <td><span class="badge bg-label-primary">{{ categorie.id }}</span></td>
+              <td>{{ categorie.nom }}</td>
+              <td>{{ categorie.description|slice(0, 50) }}{% if categorie.description|length > 50 %}...{% endif %}</td>
+              <td><span class="badge bg-label-info">{{ categorie.produits|length }}</span></td>
+              <td>
+                <div class="dropdown">
+                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                    <i class="bx bx-dots-vertical-rounded"></i>
+                  </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('app_categorie_show', {'id': categorie.id}) }}">
+                      <i class="bx bx-eye me-2"></i> Voir
+                    </a>
+                    <a class="dropdown-item" href="{{ path('app_categorie_edit', {'id': categorie.id}) }}">
+                      <i class="bx bx-pencil me-2"></i> Modifier
+                    </a>
+                    <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#confirmDelete{{ categorie.id }}">
+                      <i class="bx bx-trash me-2"></i> Supprimer
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Delete Modal -->
+                <div class="modal fade" id="confirmDelete{{ categorie.id }}" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Confirmer la suppression</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+                      <div class="modal-body">
+                        Êtes-vous sûr de vouloir supprimer cette catégorie ?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <form method="post" action="{{ path('app_categorie_delete', {'id': categorie.id}) }}" style="display:inline;">
+                          <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ categorie.id) }}">
+                          <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="5" class="text-center text-muted py-4">
+                Aucune catégorie trouvée.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

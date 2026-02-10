@@ -1,0 +1,53 @@
+{% extends 'sneat_base.html.twig' %}
+
+{% block title %}{{ categorie.nom }} - Pharmax Admin{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-8 mx-auto">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">{{ categorie.nom }}</h5>
+        <div>
+          <a href="{{ path('app_categorie_edit', {'id': categorie.id}) }}" class="btn btn-warning btn-sm me-2">
+            <i class="bx bx-pencil"></i> Modifier
+          </a>
+          <a href="{{ path('app_categorie_index') }}" class="btn btn-secondary btn-sm">
+            <i class="bx bx-arrow-back"></i> Retour
+          </a>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <h6 class="mb-1 text-muted">Description</h6>
+          <p>{{ categorie.description }}</p>
+        </div>
+
+        <div class="mb-3">
+          <h6 class="mb-2 text-muted">Produits dans cette catégorie</h6>
+          {% if categorie.produits %}
+            <div class="list-group">
+              {% for produit in categorie.produits %}
+                <a href="{{ path('app_produit_show', {'id': produit.id}) }}" class="list-group-item list-group-item-action">
+                  {{ produit.nom }}
+                </a>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="text-muted">Aucun produit dans cette catégorie.</p>
+          {% endif %}
+        </div>
+
+        <div class="pt-3">
+          <form method="post" action="{{ path('app_categorie_delete', {'id': categorie.id}) }}" onsubmit="return confirm('Êtes-vous sûr ?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ categorie.id) }}">
+            <button type="submit" class="btn btn-danger">
+              <i class="bx bx-trash"></i> Supprimer cette catégorie
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

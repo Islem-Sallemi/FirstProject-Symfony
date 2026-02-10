@@ -1,0 +1,63 @@
+{% extends 'sneat_base.html.twig' %}
+
+{% block title %}Modifier Catégorie - Pharmax Admin{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-8 mx-auto">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Modifier la catégorie: {{ categorie.nom }}</h5>
+      </div>
+      <div class="card-body">
+        {{ form_start(form, {'attr': {'novalidate': true, 'class': 'needs-validation'}}) }}
+          {% if form.vars.errors|length > 0 %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <h5 class="alert-heading">Erreurs de validation</h5>
+              <ul class="mb-0">
+                {% for error in form.vars.errors %}
+                  <li>{{ error.message }}</li>
+                {% endfor %}
+              </ul>
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          {% endif %}
+
+          <div class="mb-3">
+            {{ form_label(form.nom) }}
+            {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+            {% if form.nom.vars.errors|length > 0 %}
+              <div class="invalid-feedback d-block">
+                {% for error in form.nom.vars.errors %}
+                  {{ error.message }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="mb-3">
+            {{ form_label(form.description) }}
+            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': '4'}}) }}
+            {% if form.description.vars.errors|length > 0 %}
+              <div class="invalid-feedback d-block">
+                {% for error in form.description.vars.errors %}
+                  {{ error.message }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="pt-3 text-end">
+            <a href="{{ path('app_categorie_index') }}" class="btn btn-secondary me-2">
+              <i class="bx bx-x"></i> Annuler
+            </a>
+            <button type="submit" class="btn btn-primary">
+              <i class="bx bx-check"></i> Modifier
+            </button>
+          </div>
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

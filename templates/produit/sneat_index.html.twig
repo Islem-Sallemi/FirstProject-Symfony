@@ -1,0 +1,176 @@
+{% extends 'sneat_base.html.twig' %}
+
+{% block title %}Produits - Pharmax Admin{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title mb-3">Filtres et Recherche</h5>
+        
+        <form method="GET" action="{{ path('app_produit_index') }}" class="row g-3">
+          <!-- Recherche -->
+          <div class="col-md-4">
+            <label class="form-label">Rechercher</label>
+            <input type="text" name="search" class="form-control" placeholder="Nom ou description..." value="{{ search }}">
+          </div>
+
+          <!-- Catégorie -->
+          <div class="col-md-3">
+            <label class="form-label">Catégorie</label>
+            <select name="categorie" class="form-select">
+              <option value="">Toutes les catégories</option>
+              {% for cat in categories %}
+                <option value="{{ cat.id }}" {% if categorie == cat.id %}selected{% endif %}>
+                  {{ cat.nom }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Tri -->
+          <div class="col-md-3">
+            <label class="form-label">Trier par</label>
+            <select name="sortBy" class="form-select">
+              <option value="createdAt" {% if sortBy == 'createdAt' %}selected{% endif %}>Date d'ajout</option>
+              <option value="nom" {% if sortBy == 'nom' %}selected{% endif %}>Nom</option>
+              <option value="prix" {% if sortBy == 'prix' %}selected{% endif %}>Prix</option>
+              <option value="dateExpiration" {% if sortBy == 'dateExpiration' %}selected{% endif %}>Date expiration</option>
+            </select>
+          </div>
+
+          <!-- Ordre de tri -->
+          <div class="col-md-2">
+            <label class="form-label">Ordre</label>
+            <select name="sortOrder" class="form-select">
+              <option value="DESC" {% if sortOrder == 'DESC' %}selected{% endif %}>↓ Décroissant</option>
+              <option value="ASC" {% if sortOrder == 'ASC' %}selected{% endif %}>↑ Croissant</option>
+            </select>
+          </div>
+
+          <!-- Boutons -->
+          <div class="col-12 d-flex align-items-end gap-2">
+            <button type="submit" class="btn btn-primary">
+              <i class="bx bx-search"></i> Rechercher
+            </button>
+            <a href="{{ path('app_produit_index') }}" class="btn btn-secondary">
+              <i class="bx bx-reset"></i> Réinitialiser
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Liste des Produits ({{ produits|length }})</h5>
+        <a href="{{ path('app_produit_new') }}" class="btn btn-primary btn-sm">
+          <i class="bx bx-plus"></i> Ajouter un produit
+        </a>
+      </div>
+      <div class="table-responsive text-nowrap">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Image</th>
+              <th>Nom</th>
+              <th>Prix</th>
+              <th>Quantité</th>
+              <th>Catégorie</th>
+              <th>Statut</th>
+              <th>Date Expiration</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for produit in produits %}
+            <tr>
+              <td><span class="badge bg-label-primary">{{ produit.id }}</span></td>
+              <td>
+                {% if produit.image %}
+                  <img src="{{ asset('uploads/' ~ produit.image) }}" alt="{{ produit.nom }}" class="rounded" style="max-width: 50px; max-height: 50px; object-fit: cover;">
+                {% else %}
+                  <span class="text-muted">-</span>
+                {% endif %}
+              </td>
+              <td>{{ produit.nom }}</td>
+              <td>{{ produit.prix }} DTN</td>
+              <td>
+                <span class="badge bg-label-info">{{ produit.quantite }}</span>
+              </td>
+              <td>
+                {% if produit.categorie %}
+                  {{ produit.categorie.nom }}
+                {% else %}
+                  <span class="text-muted badge bg-label-danger">Catégorie supprimée</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if produit.statut %}
+                  <span class="badge bg-label-success">Valable</span>
+                {% else %}
+                  <span class="badge bg-label-danger">Hors Stock</span>
+                {% endif %}
+              </td>
+              <td>{{ produit.dateExpiration ? produit.dateExpiration|date('d/m/Y') : '-' }}</td>
+              <td>
+                <div class="dropdown">
+                  <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                    <i class="bx bx-dots-vertical-rounded"></i>
+                  </button>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{{ path('app_produit_show', {'id': produit.id}) }}">
+                      <i class="bx bx-eye me-2"></i> Voir
+                    </a>
+                    <a class="dropdown-item" href="{{ path('app_produit_edit', {'id': produit.id}) }}">
+                      <i class="bx bx-pencil me-2"></i> Modifier
+                    </a>
+                    <a class="dropdown-item" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#confirmDelete{{ produit.id }}">
+                      <i class="bx bx-trash me-2"></i> Supprimer
+                    </a>
+                  </div>
+                </div>
+
+                <!-- Delete Modal -->
+                <div class="modal fade" id="confirmDelete{{ produit.id }}" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Confirmer la suppression</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+                      <div class="modal-body">
+                        Êtes-vous sûr de vouloir supprimer ce produit ?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <form method="post" action="{{ path('app_produit_delete', {'id': produit.id}) }}" style="display:inline;">
+                          <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ produit.id) }}">
+                          <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="8" class="text-center text-muted py-4">
+                Aucun produit trouvé.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
